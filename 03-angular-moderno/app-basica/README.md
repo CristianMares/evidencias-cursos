@@ -1,59 +1,42 @@
-# AppBasica
+# App básica de Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
+Práctica de las secciones 4 y 5 del curso *Angular moderno: de cero a experto*
+(Fernando Herrera). Proyecto creado con Angular CLI 21, componentes standalone y
+detección de cambios sin zone.js (zoneless).
 
-## Development server
+## Páginas
 
-To start a local development server, run:
+| Ruta | Página | Qué practica |
+|---|---|---|
+| `/` | Counter | Componente, `templateUrl` y `styleUrl`, signals (`signal`, `set`, `update`) |
+| `/hero` | Hero | Signals y señales computadas (`computed`) |
+| `/dragonball` | Dragon Ball | `@for`, `@if`, `ngClass`, formulario con signals |
+| `/dragonball-super` | Dragon Ball Super | La misma pantalla separada en componentes: `input()`, `output()` y un servicio |
 
-```bash
-ng serve
-```
+## Tareas del curso que incluye
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Counter**: botones de restar y reset, con el template en su propio archivo `.html`.
+- **Hero**: nombre y edad con signals, cambiar héroe, cambiar edad, reset y nombre en mayúsculas con una señal computada.
+- **Dragon Ball**: página nueva con su ruta y su enlace en el navbar.
+- **Lista de personajes**: nuevo `input` llamado `listName` que se muestra como título.
+- **Agregar personaje**: componente aparte que avisa al padre con `output()`.
 
-## Code scaffolding
+## Conceptos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `signal()` guarda un valor que Angular vigila; se lee con `()` y se cambia con `set` o `update`.
+- `computed()` calcula un valor a partir de otras señales y se actualiza solo.
+- `input()` recibe datos del componente padre; `output()` le avisa algo al padre.
+- `DragonballService` guarda el estado de los personajes, así lo comparten los componentes.
+- `effect()` guarda los personajes en LocalStorage cada vez que cambian, y al iniciar
+  se leen de ahí, así no se pierden al recargar.
 
-```bash
-ng generate component component-name
-```
+## Cómo correrlo
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Requiere Node.js.
 
 ```bash
-ng test
+npm install
+npm start
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Se abre en `http://localhost:4200`.
