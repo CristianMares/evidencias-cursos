@@ -1,10 +1,10 @@
-import { NgClass } from '@angular/common';
+import { DragonballCharacterListComponent } from '../../components/dragonball/dragonball-character-list.component';
 import { Component, signal } from '@angular/core';
 import { Character } from '../../interfaces/character.interface';
 
 @Component({
   selector: 'app-dragonball-super-page',
-  imports: [NgClass],
+  imports: [DragonballCharacterListComponent],
   templateUrl: './dragonball-super-page.component.html',
 })
 export class DragonballSuperPageComponent {
