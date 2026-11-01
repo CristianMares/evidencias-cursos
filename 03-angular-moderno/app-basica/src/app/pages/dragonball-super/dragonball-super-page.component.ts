@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DragonballCharacterAddComponent } from '../../components/dragonball/dragonball-character-add.component';
 import { DragonballCharacterListComponent } from '../../components/dragonball/dragonball-character-list.component';
-import { Character } from '../../interfaces/character.interface';
+import { DragonballService } from '../../services/dragonball.service';
 
 @Component({
   selector: 'app-dragonball-super-page',
@@ -9,12 +9,6 @@ import { Character } from '../../interfaces/character.interface';
   templateUrl: './dragonball-super-page.component.html',
 })
 export class DragonballSuperPageComponent {
-  characters = signal<Character[]>([
-    { id: 1, name: 'Goku', power: 9001 },
-    { id: 2, name: 'Vegeta', power: 8000 },
-  ]);
-
-  addCharacter(character: Character) {
-    this.characters.update((list) => [...list, character]);
-  }
+  // Inyeccion del servicio: el estado vive en el servicio, no en la pagina.
+  public dragonballService = inject(DragonballService);
 }
