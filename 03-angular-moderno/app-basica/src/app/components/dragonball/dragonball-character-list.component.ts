@@ -8,6 +8,6 @@ import { Character } from '../../interfaces/character.interface';
   templateUrl: './dragonball-character-list.component.html',
 })
 export class DragonballCharacterListComponent {
-  // Signal input: el padre le manda los personajes.
   characters = input.required<Character[]>();
+  listName = input.required<string>();
 }
