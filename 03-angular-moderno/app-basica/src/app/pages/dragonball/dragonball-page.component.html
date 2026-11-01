@@ -1,2 +1,11 @@
 <h1>Dragon Ball</h1>
 <hr />
+
+<ul class="list-group">
+  @for (character of characters(); track character.id) {
+    <li class="list-group-item d-flex justify-content-between">
+      <span>{{ character.id }} - {{ character.name }}</span>
+      <strong>{{ character.power }}</strong>
+    </li>
+  }
+</ul>
