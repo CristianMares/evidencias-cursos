@@ -1,0 +1,21 @@
+{
+  "name": "practica-typescript",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Practica del curso de TypeScript desde cero",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "hola": "tsx src/01-hola-mundo.ts",
+    "variables": "tsx src/02-variables-y-tipos.ts",
+    "flujo": "tsx src/03-control-de-flujo.ts",
+    "funciones": "tsx src/04-funciones.ts",
+    "estructuras": "tsx src/05-estructuras.ts",
+    "bucles": "tsx src/06-bucles.ts",
+    "clases": "tsx src/07-clases-y-enums.ts",
+    "tareas": "tsx src/gestor-tareas.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
