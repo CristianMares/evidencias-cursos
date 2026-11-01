@@ -1,13 +1,17 @@
 <h1>Dragon Ball</h1>
 <hr />
 
-<ul class="list-group">
-  @for (character of characters(); track character.id) {
-    <li class="list-group-item d-flex justify-content-between">
-      <span [ngClass]="{ 'text-primary': character.power > 9000 }">
-        {{ character.id }} - {{ character.name }}
-      </span>
-      <strong>{{ character.power }}</strong>
-    </li>
-  }
-</ul>
+@if (characters().length === 0) {
+  <div class="alert alert-warning">No hay personajes</div>
+} @else {
+  <ul class="list-group">
+    @for (character of characters(); track character.id) {
+      <li class="list-group-item d-flex justify-content-between">
+        <span [ngClass]="{ 'text-primary': character.power > 9000 }">
+          {{ character.id }} - {{ character.name }}
+        </span>
+        <strong>{{ character.power }}</strong>
+      </li>
+    }
+  </ul>
+}
