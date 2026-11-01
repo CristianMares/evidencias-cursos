@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 
 @Component({
   selector: 'app-hero-page',
@@ -8,9 +8,9 @@ export class HeroPageComponent {
   name = signal('Ironman');
   age = signal(45);
 
-  getHeroDescription() {
-    return `${this.name()} - ${this.age()}`;
-  }
+  // Senales computadas: de solo lectura, se recalculan cuando cambian name o age.
+  heroDescription = computed(() => `${this.name()} - ${this.age()}`);
+  capitalizedName = computed(() => this.name().toUpperCase());
 
   changeHero() {
     this.name.set('Spiderman');
