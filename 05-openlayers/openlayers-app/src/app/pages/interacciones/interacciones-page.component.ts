@@ -1,17 +1,18 @@
 import { Component, signal } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
+import GeoJSON from 'ol/format/GeoJSON';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
-import GeoJSON from 'ol/format/GeoJSON';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
-import { Draw } from 'ol/interaction';
+import { Draw, Modify } from 'ol/interaction';
+import Interaction from 'ol/interaction/Interaction';
 import { fromLonLat } from 'ol/proj';
 import { MapComponent } from '../../components/map/map.component';
 import { LA_PAZ } from '../../shared/la-paz';
 
-type Herramienta = 'punto' | 'linea' | 'poligono';
+type Herramienta = 'punto' | 'linea' | 'poligono' | 'modificar';
 
 @Component({
   selector: 'app-interacciones-page',
@@ -19,8 +20,8 @@ type Herramienta = 'punto' | 'linea' | 'poligono';
   template: `
     <h2>Interacciones</h2>
     <p class="text-muted">
-      Dibuja puntos, lineas y poligonos. Un clic en el boton activa la herramienta y otro clic la desactiva.
-      Para terminar una linea o un poligono haz doble clic.
+      Dibuja puntos, lineas y poligonos y modificalos. Un clic en el boton activa la herramienta y otro clic la
+      desactiva. Para terminar una linea o un poligono haz doble clic.
     </p>
 
     <div class="mb-3">
@@ -54,6 +55,7 @@ export default class InteraccionesPageComponent {
     { id: 'punto', nombre: 'Punto' },
     { id: 'linea', nombre: 'Linea' },
     { id: 'poligono', nombre: 'Poligono' },
+    { id: 'modificar', nombre: 'Modificar' },
   ];
 
   herramienta = signal<Herramienta | null>(null);
@@ -63,11 +65,13 @@ export default class InteraccionesPageComponent {
   source = new VectorSource();
   layer = new VectorLayer({ source: this.source });
 
-  // Una interaccion Draw por tipo de geometria, todas apagadas al inicio.
-  private interacciones: Record<Herramienta, Draw> = {
+  // Una interaccion por herramienta, todas apagadas al inicio.
+  private interacciones: Record<Herramienta, Interaction> = {
     punto: new Draw({ source: this.source, type: 'Point' }),
     linea: new Draw({ source: this.source, type: 'LineString' }),
     poligono: new Draw({ source: this.source, type: 'Polygon' }),
+    // Modify mueve puntos y vertices, y agrega vertices nuevos en lineas y poligonos.
+    modificar: new Modify({ source: this.source }),
   };
 
   map = new Map({
