@@ -1,5 +1,6 @@
 import http from 'node:http';
 import fs from 'node:fs';
+import { findAvailablePort } from './find-free-port.mjs';
 
 const processRequest = (req, res) => {
   console.log('Peticion recibida:', req.method, req.url);
@@ -49,6 +50,9 @@ const processRequest = (req, res) => {
 
 const server = http.createServer(processRequest);
 
-server.listen(0, () => {
-  console.log(`Servidor escuchando en http://localhost:${server.address().port}`);
+// Usa PORT si existe; si esta ocupado, busca otro libre.
+findAvailablePort(process.env.PORT ?? 3000).then((port) => {
+  server.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+  });
 });
