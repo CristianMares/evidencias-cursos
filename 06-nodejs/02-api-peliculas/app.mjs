@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import crypto from 'node:crypto';
 import { readJSON } from './utils.mjs';
 import { validateMovie, validatePartialMovie } from './schemas/movies.mjs';
@@ -10,33 +11,22 @@ const app = express();
 app.disable('x-powered-by');
 app.use(express.json());
 
-// CORS: el navegador bloquea las peticiones a otro origen (otro dominio o puerto)
-// salvo que el servidor responda con la cabecera Access-Control-Allow-Origin.
-// Aqui solo se aceptan los origenes de esta lista (lista blanca).
+// CORS: el paquete cors responde las cabeceras y los preflight (OPTIONS) por nosotros.
+// origin recibe el origen de la peticion y decide si se permite.
 const ACCEPTED_ORIGINS = ['http://localhost:8080', 'http://localhost:4200', 'https://movies.com'];
 
-app.use((req, res, next) => {
-  const origin = req.header('origin');
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Sin origin: peticiones del mismo origen o de herramientas como curl.
+      if (!origin || ACCEPTED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
 
-  // Si la peticion es del mismo origen, el navegador no manda la cabecera origin.
-  if (origin && ACCEPTED_ORIGINS.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-
-  next();
-});
-
-// Las peticiones con PATCH o DELETE primero mandan un OPTIONS (preflight) preguntando si estan permitidas.
-app.options('/movies/:id', (req, res) => {
-  const origin = req.header('origin');
-
-  if (origin && ACCEPTED_ORIGINS.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-  }
-
-  res.sendStatus(204);
-});
+      return callback(new Error('Not allowed by CORS'));
+    },
+  }),
+);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hola mundo' });
