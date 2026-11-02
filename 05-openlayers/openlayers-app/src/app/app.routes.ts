@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/controles/controles-page.component'),
   },
   {
+    path: 'raster',
+    loadComponent: () => import('./pages/raster/raster-page.component'),
+  },
+  {
     path: '**',
     redirectTo: 'vista-de-inicio',
   },
