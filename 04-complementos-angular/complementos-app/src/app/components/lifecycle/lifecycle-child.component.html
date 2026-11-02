@@ -1,5 +1,6 @@
-<div class="card card-body">
+<div class="card card-body" #box>
   <p class="mb-2">Componente hijo. Nombre recibido: <strong>{{ name() }}</strong></p>
   <!-- Contenido proyectado desde el padre: dispara los hooks AfterContent -->
   <ng-content />
+  <small class="text-muted mt-2">Alto medido con afterNextRender: {{ boxHeight() }} px</small>
 </div>
