@@ -1,0 +1,41 @@
+### Recuperar todas las peliculas
+GET http://localhost:1234/movies
+
+### Recuperar una pelicula por id (reemplaza el id por uno de la lista)
+GET http://localhost:1234/movies/dd8fb28c-d0c5-4f39-a21b-1ee3d8828f38
+
+### Recuperar todas las peliculas de un genero
+GET http://localhost:1234/movies?genre=Action
+
+### Crear una pelicula con POST
+POST http://localhost:1234/movies
+Content-Type: application/json
+
+{
+  "title": "The Godfather Part II",
+  "year": 1974,
+  "director": "Francis Ford Coppola",
+  "duration": 202,
+  "poster": "https://placehold.co/300x450?text=Godfather",
+  "genre": ["Crime", "Drama"]
+}
+
+### Crear una pelicula con datos invalidos (devuelve 400)
+POST http://localhost:1234/movies
+Content-Type: application/json
+
+{
+  "title": 1,
+  "year": "hola"
+}
+
+### Actualizar una parte de una pelicula (reemplaza el id)
+PATCH http://localhost:1234/movies/dd8fb28c-d0c5-4f39-a21b-1ee3d8828f38
+Content-Type: application/json
+
+{
+  "year": 2001
+}
+
+### Eliminar una pelicula (reemplaza el id)
+DELETE http://localhost:1234/movies/dd8fb28c-d0c5-4f39-a21b-1ee3d8828f38
