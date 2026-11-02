@@ -9,4 +9,17 @@
       <span class="block text-sm text-slate-300">{{ option.subLabel }}</span>
     </a>
   }
+
+  <hr class="my-2 border-slate-600" />
+  <h3 class="px-2 text-sm uppercase text-slate-400">Historial</h3>
+
+  @for (key of gifService.searchHistoryKeys(); track key) {
+    <a
+      class="block rounded p-2 hover:bg-slate-700"
+      [routerLink]="['/dashboard/history', key]"
+      routerLinkActive="bg-slate-600"
+    >
+      {{ key }}
+    </a>
+  }
 </nav>
