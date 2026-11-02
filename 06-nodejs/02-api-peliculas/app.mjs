@@ -83,6 +83,19 @@ app.patch('/movies/:id', (req, res) => {
   return res.json(updateMovie);
 });
 
+app.delete('/movies/:id', (req, res) => {
+  const { id } = req.params;
+  const movieIndex = movies.findIndex((movie) => movie.id === id);
+
+  if (movieIndex === -1) {
+    return res.status(404).json({ message: 'Pelicula no encontrada' });
+  }
+
+  movies.splice(movieIndex, 1);
+
+  return res.json({ message: 'Pelicula eliminada' });
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
