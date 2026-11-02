@@ -11,4 +11,9 @@ export default class LifecyclePageComponent {
   logService = inject(LifecycleLogService);
 
   name = signal('Angular');
+  showChild = signal(true);
+
+  toggleChild() {
+    this.showChild.update((value) => !value);
+  }
 }

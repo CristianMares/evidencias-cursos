@@ -12,9 +12,18 @@
       #txtName
     />
 
-    <app-lifecycle-child [name]="name()">
-      <em>Contenido proyectado desde la pagina</em>
-    </app-lifecycle-child>
+    <div class="mb-3">
+      <button class="btn btn-primary me-2" (click)="toggleChild()">
+        {{ showChild() ? 'Ocultar' : 'Mostrar' }} componente hijo
+      </button>
+      <button class="btn btn-outline-secondary" (click)="logService.clear()">Limpiar registro</button>
+    </div>
+
+    @if (showChild()) {
+      <app-lifecycle-child [name]="name()">
+        <em>Contenido proyectado desde la pagina</em>
+      </app-lifecycle-child>
+    }
   </div>
 
   <div class="col-md-6">
