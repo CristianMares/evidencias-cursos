@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { MovieController } from './controllers/movies.mjs';
+import { moviesRouter } from './routes/movies.mjs';
 
 const PORT = process.env.PORT ?? 1234;
 
@@ -29,11 +29,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hola mundo' });
 });
 
-app.get('/movies', MovieController.getAll);
-app.get('/movies/:id', MovieController.getById);
-app.post('/movies', MovieController.create);
-app.patch('/movies/:id', MovieController.update);
-app.delete('/movies/:id', MovieController.delete);
+// Todas las rutas que empiezan con /movies las atiende el router.
+app.use('/movies', moviesRouter);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
