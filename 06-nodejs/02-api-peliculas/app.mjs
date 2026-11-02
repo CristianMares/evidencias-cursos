@@ -1,7 +1,7 @@
 import express from 'express';
 import crypto from 'node:crypto';
 import { readJSON } from './utils.mjs';
-import { validateMovie } from './schemas/movies.mjs';
+import { validateMovie, validatePartialMovie } from './schemas/movies.mjs';
 
 const movies = readJSON('./movies.json');
 const PORT = process.env.PORT ?? 1234;
@@ -56,6 +56,31 @@ app.post('/movies', (req, res) => {
 
   // 201 Created: devuelve el recurso creado.
   res.status(201).json(newMovie);
+});
+
+// PATCH actualiza solo los campos enviados (PUT reemplazaria todo el recurso).
+app.patch('/movies/:id', (req, res) => {
+  const result = validatePartialMovie(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues.map((issue) => issue.message) });
+  }
+
+  const { id } = req.params;
+  const movieIndex = movies.findIndex((movie) => movie.id === id);
+
+  if (movieIndex === -1) {
+    return res.status(404).json({ message: 'Pelicula no encontrada' });
+  }
+
+  const updateMovie = {
+    ...movies[movieIndex],
+    ...result.data,
+  };
+
+  movies[movieIndex] = updateMovie;
+
+  return res.json(updateMovie);
 });
 
 app.listen(PORT, () => {
