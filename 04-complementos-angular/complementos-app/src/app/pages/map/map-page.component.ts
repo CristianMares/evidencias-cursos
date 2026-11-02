@@ -5,6 +5,7 @@ import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import { MapComponent } from '../../components/map/map.component';
+import { ScalelineComponent } from '../../components/scaleline/scaleline.component';
 
 interface Place {
   name: string;
@@ -15,7 +16,7 @@ interface Place {
 
 @Component({
   selector: 'app-map-page',
-  imports: [MapComponent],
+  imports: [MapComponent, ScalelineComponent],
   template: `
     <h2>Mapa</h2>
     <hr />
@@ -29,6 +30,10 @@ interface Place {
     <div class="map-container">
       <app-map [map]="map" />
     </div>
+
+    <footer class="d-flex justify-content-between mt-2">
+      <app-scaleline [map]="map" />
+    </footer>
   `,
   styles: ['.map-container { height: 500px; border: 1px solid #ced4da; }'],
 })
