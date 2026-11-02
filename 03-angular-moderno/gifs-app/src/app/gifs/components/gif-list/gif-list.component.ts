@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { Gif } from '../../interfaces/gif.interface';
 import { GifListItemComponent } from './gif-list-item.component';
 
 @Component({
@@ -6,12 +7,12 @@ import { GifListItemComponent } from './gif-list-item.component';
   imports: [GifListItemComponent],
   template: `
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      @for (imageUrl of imageUrls(); track imageUrl) {
-        <gifs-gif-list-item [imageUrl]="imageUrl" />
+      @for (gif of gifs(); track gif.id) {
+        <gifs-gif-list-item [imageUrl]="gif.url" />
       }
     </div>
   `,
 })
 export class GifListComponent {
-  imageUrls = input.required<string[]>();
+  gifs = input.required<Gif[]>();
 }
