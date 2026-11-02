@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { GifListItemComponent } from './gif-list-item.component';
 
 @Component({
@@ -6,10 +6,12 @@ import { GifListItemComponent } from './gif-list-item.component';
   imports: [GifListItemComponent],
   template: `
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
-        <gifs-gif-list-item />
+      @for (imageUrl of imageUrls(); track imageUrl) {
+        <gifs-gif-list-item [imageUrl]="imageUrl" />
       }
     </div>
   `,
 })
-export class GifListComponent {}
+export class GifListComponent {
+  imageUrls = input.required<string[]>();
+}
