@@ -18,7 +18,10 @@ import { MapComponent } from '../../components/map/map.component';
       Un archivo GeoJSON con puntos (ciudades), lineas (carreteras) y poligonos (zonas). Las geometrias son
       aproximadas, solo para practicar. Haz clic en un objeto para ver sus atributos.
     </p>
-    <p>Objetos cargados: <strong>{{ cantidad() }}</strong></p>
+    <p>
+      Objetos cargados: <strong>{{ cantidad() }}</strong>. La capa vectorial solo se ve entre los niveles de zoom 4 y 12
+      (zoom actual: <strong>{{ zoom() }}</strong>).
+    </p>
 
     <div class="map-container">
       <app-map [map]="map" />
@@ -35,6 +38,7 @@ import { MapComponent } from '../../components/map/map.component';
 export default class VectoresPageComponent {
   cantidad = signal(0);
   atributos = signal<string | null>(null);
+  zoom = signal(5.5);
 
   // El VectorSource guarda los datos (de donde vienen y en que formato)...
   source = new VectorSource({
@@ -43,7 +47,8 @@ export default class VectoresPageComponent {
   });
 
   // ...y el VectorLayer los muestra en el mapa.
-  vectorLayer = new VectorLayer({ source: this.source });
+  // minZoom y maxZoom en el layer: fuera de ese rango la capa se oculta (el mapa sigue).
+  vectorLayer = new VectorLayer({ source: this.source, minZoom: 4, maxZoom: 12 });
 
   map = new Map({
     layers: [new TileLayer({ source: new OSM() }), this.vectorLayer],
@@ -54,6 +59,7 @@ export default class VectoresPageComponent {
   });
 
   constructor() {
+    this.map.on('moveend', () => this.zoom.set(Math.round((this.map.getView().getZoom() ?? 0) * 10) / 10));
     this.source.on('featuresloadend', () => this.cantidad.set(this.source.getFeatures().length));
 
     this.map.on('singleclick', (evento) => {
