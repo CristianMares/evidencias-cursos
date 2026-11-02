@@ -9,13 +9,16 @@
   },
   "scripts": {
     "dev": "node --watch index.mjs",
+    "dev:mysql": "node --watch index-mysql.mjs",
     "start": "node index.mjs",
+    "start:mysql": "node index-mysql.mjs",
     "http": "node --watch servidor-http.mjs",
     "express": "node --watch servidor-express.mjs"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.3.0",
+    "mysql2": "^3.24.6",
     "zod": "^4.6.7"
   }
 }
