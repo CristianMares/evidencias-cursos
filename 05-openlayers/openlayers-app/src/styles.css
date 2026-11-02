@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Contenedor de los mapas: OpenLayers necesita que la caja tenga un alto definido. */
+.map-container {
+  height: 500px;
+  border: 1px solid #ced4da;
+}
