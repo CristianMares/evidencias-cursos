@@ -61,5 +61,12 @@
     }
   </div>
 
-  <button type="submit" class="btn btn-primary" [disabled]="contactForm.invalid">Enviar</button>
+  <button type="submit" class="btn btn-primary me-2" [disabled]="contactForm.invalid">Enviar</button>
+  <button type="button" class="btn btn-outline-secondary me-2" (click)="patchName()">patchValue (solo nombre)</button>
+  <button type="button" class="btn btn-outline-secondary" (click)="setAllValues()">setValue (todos)</button>
 </form>
+
+@if (sentValue(); as value) {
+  <h5 class="mt-4">Ultimo valor enviado</h5>
+  <pre class="bg-light p-3">{{ value }}</pre>
+}
