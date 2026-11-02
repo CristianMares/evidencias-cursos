@@ -4,12 +4,30 @@
 <form class="col-md-6" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <div class="mb-3">
     <label class="form-label" for="name">Nombre</label>
-    <input id="name" type="text" class="form-control" formControlName="name" />
+    <input
+      id="name"
+      type="text"
+      class="form-control"
+      [class.is-invalid]="contactForm.controls.name.touched && contactForm.controls.name.invalid"
+      formControlName="name"
+    />
+    @if (contactForm.controls.name.touched && contactForm.controls.name.errors; as errors) {
+      <div class="text-danger small">
+        @if (errors['required']) {
+          El nombre es requerido
+        } @else if (errors['minlength']) {
+          El nombre debe tener al menos {{ errors['minlength'].requiredLength }} caracteres
+        }
+      </div>
+    }
   </div>
 
   <div class="form-check mb-3">
     <input id="checkAdult" type="checkbox" class="form-check-input" formControlName="checkAdult" />
     <label class="form-check-label" for="checkAdult">Soy mayor de 18 anios</label>
+    @if (contactForm.controls.checkAdult.touched && contactForm.controls.checkAdult.invalid) {
+      <div class="text-danger small">Debes confirmar que eres mayor de edad</div>
+    }
   </div>
 
   <div class="mb-3">
@@ -20,12 +38,28 @@
       <option value="soporte">Soporte</option>
       <option value="sistemas">Sistemas</option>
     </select>
+    <div class="form-text">Este campo es opcional, no tiene validaciones.</div>
   </div>
 
   <div class="mb-3">
     <label class="form-label" for="comment">Comentario</label>
-    <textarea id="comment" rows="3" class="form-control" formControlName="comment"></textarea>
+    <textarea
+      id="comment"
+      rows="3"
+      class="form-control"
+      [class.is-invalid]="contactForm.controls.comment.touched && contactForm.controls.comment.invalid"
+      formControlName="comment"
+    ></textarea>
+    @if (contactForm.controls.comment.touched && contactForm.controls.comment.errors; as errors) {
+      <div class="text-danger small">
+        @if (errors['required']) {
+          El comentario es requerido
+        } @else if (errors['maxlength']) {
+          El comentario no puede pasar de {{ errors['maxlength'].requiredLength }} caracteres
+        }
+      </div>
+    }
   </div>
 
-  <button type="submit" class="btn btn-primary">Enviar</button>
+  <button type="submit" class="btn btn-primary" [disabled]="contactForm.invalid">Enviar</button>
 </form>
