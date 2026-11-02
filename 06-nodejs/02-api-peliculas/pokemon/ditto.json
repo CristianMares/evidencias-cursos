@@ -1,0 +1,8 @@
+{
+  "id": 132,
+  "name": "ditto",
+  "types": ["normal"],
+  "height": 3,
+  "weight": 40,
+  "abilities": ["limber", "imposter"]
+}
