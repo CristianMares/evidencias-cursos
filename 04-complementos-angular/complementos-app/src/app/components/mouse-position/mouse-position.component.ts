@@ -6,6 +6,7 @@ import { CoordinateFormatterService } from '../../services/coordinate-formatter.
 @Component({
   selector: 'app-mouse-position',
   template: '',
+  styles: ['.mouseposition-control { font-family: monospace; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MousePositionComponent implements OnInit, OnDestroy {
