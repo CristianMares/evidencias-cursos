@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cliente de la API de peliculas</title>
+    <style>
+      body { font-family: sans-serif; margin: 2rem; }
+      article { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; display: flex; gap: 1rem; }
+      img { width: 90px; border-radius: 4px; }
+      h2 { margin: 0 0 0.25rem; }
+      p { margin: 0.1rem 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Peliculas</h1>
+    <main></main>
+
+    <script type="module">
+      // Esta pagina se sirve en otro origen (otro puerto), por eso el navegador aplica CORS.
+      fetch('http://localhost:1234/movies')
+        .then((res) => res.json())
+        .then((movies) => {
+          const html = movies
+            .map(
+              (movie) => `
+            <article>
+              <img src="${movie.poster}" alt="${movie.title}" />
+              <div>
+                <h2>${movie.title}</h2>
+                <p>${movie.year} - ${movie.director}</p>
+                <p>${movie.genre.join(', ')}</p>
+              </div>
+            </article>`,
+            )
+            .join('');
+
+          document.querySelector('main').innerHTML = html;
+        })
+        .catch((error) => {
+          document.querySelector('main').textContent = 'Error: ' + error.message;
+        });
+    </script>
+  </body>
+</html>

@@ -10,6 +10,21 @@ const app = express();
 app.disable('x-powered-by');
 app.use(express.json());
 
+// CORS: el navegador bloquea las peticiones a otro origen (otro dominio o puerto)
+// salvo que el servidor responda con la cabecera Access-Control-Allow-Origin.
+// '*' permite cualquier origen.
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+// Las peticiones con PATCH o DELETE primero mandan un OPTIONS (preflight) preguntando si estan permitidas.
+app.options('/movies/:id', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.sendStatus(204);
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'Hola mundo' });
 });
