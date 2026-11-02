@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { LifecycleChildComponent } from '../../components/lifecycle/lifecycle-child.component';
 import { LifecycleLogService } from '../../services/lifecycle-log.service';
 
@@ -9,4 +9,6 @@ import { LifecycleLogService } from '../../services/lifecycle-log.service';
 })
 export default class LifecyclePageComponent {
   logService = inject(LifecycleLogService);
+
+  name = signal('Angular');
 }

@@ -3,7 +3,16 @@
 
 <div class="row">
   <div class="col-md-6">
-    <app-lifecycle-child />
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Escribe un nombre"
+      [value]="name()"
+      (input)="name.set(txtName.value)"
+      #txtName
+    />
+
+    <app-lifecycle-child [name]="name()" />
   </div>
 
   <div class="col-md-6">
