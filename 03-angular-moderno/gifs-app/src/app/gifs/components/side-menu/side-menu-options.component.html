@@ -1,6 +1,10 @@
 <nav class="flex flex-col gap-2">
   @for (option of menuOptions; track option.route) {
-    <a class="block rounded p-2 hover:bg-slate-700">
+    <a
+      class="block rounded p-2 hover:bg-slate-700"
+      [routerLink]="option.route"
+      routerLinkActive="bg-slate-600"
+    >
       <span class="block font-semibold">{{ option.label }}</span>
       <span class="block text-sm text-slate-300">{{ option.subLabel }}</span>
     </a>
