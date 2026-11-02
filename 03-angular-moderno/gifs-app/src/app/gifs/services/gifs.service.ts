@@ -16,6 +16,10 @@ export class GifService {
   searchHistory = signal<Record<string, Gif[]>>({});
   searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
 
+  getHistoryGifs(query: string): Gif[] {
+    return this.searchHistory()[query] ?? [];
+  }
+
   constructor() {
     this.loadTrendingGifs();
   }
