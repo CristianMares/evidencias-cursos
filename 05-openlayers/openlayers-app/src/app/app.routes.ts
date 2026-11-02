@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/raster/raster-page.component'),
   },
   {
+    path: 'vectores',
+    loadComponent: () => import('./pages/vectores/vectores-page.component'),
+  },
+  {
     path: '**',
     redirectTo: 'vista-de-inicio',
   },
