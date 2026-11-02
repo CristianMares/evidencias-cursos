@@ -3,3 +3,10 @@
   height: 500px;
   border: 1px solid #ced4da;
 }
+
+/* Pantalla completa: por defecto va arriba a la derecha y tapa el boton de rotacion. */
+.ol-full-screen-izq {
+  position: absolute;
+  top: 0.5em;
+  left: 3em;
+}
