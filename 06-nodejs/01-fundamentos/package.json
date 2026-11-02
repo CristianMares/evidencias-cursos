@@ -16,5 +16,8 @@
     "process": "node process.mjs",
     "ls": "node ls.mjs",
     "servidor": "node --watch servidor-http.mjs"
+  },
+  "dependencies": {
+    "picocolors": "^1.1.1"
   }
 }
