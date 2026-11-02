@@ -1,10 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import crypto from 'node:crypto';
-import { readJSON } from './utils.mjs';
+import { MovieModel } from './models/movie.mjs';
 import { validateMovie, validatePartialMovie } from './schemas/movies.mjs';
 
-const movies = readJSON('./movies.json');
 const PORT = process.env.PORT ?? 1234;
 
 const app = express();
@@ -33,30 +31,23 @@ app.get('/', (req, res) => {
 });
 
 // Recupera todas las peliculas. Con ?genre=action filtra por genero (sin importar mayusculas).
-app.get('/movies', (req, res) => {
+app.get('/movies', async (req, res) => {
   const { genre } = req.query;
-
-  if (genre) {
-    const filteredMovies = movies.filter((movie) =>
-      movie.genre.some((g) => g.toLowerCase() === genre.toLowerCase()),
-    );
-    return res.json(filteredMovies);
-  }
-
+  const movies = await MovieModel.getAll({ genre });
   res.json(movies);
 });
 
 // :id es un parametro de la ruta, por ejemplo /movies/abc-123.
-app.get('/movies/:id', (req, res) => {
+app.get('/movies/:id', async (req, res) => {
   const { id } = req.params;
-  const movie = movies.find((movie) => movie.id === id);
+  const movie = await MovieModel.getById({ id });
 
   if (movie) return res.json(movie);
 
   res.status(404).json({ message: 'Pelicula no encontrada' });
 });
 
-app.post('/movies', (req, res) => {
+app.post('/movies', async (req, res) => {
   const result = validateMovie(req.body);
 
   // 400 Bad Request: el cliente mando datos invalidos.
@@ -64,20 +55,14 @@ app.post('/movies', (req, res) => {
     return res.status(400).json({ error: result.error.issues.map((issue) => issue.message) });
   }
 
-  const newMovie = {
-    id: crypto.randomUUID(), // uuid v4
-    ...result.data,
-  };
-
-  // Esto no es REST puro porque el estado se guarda en memoria; mas adelante va a una base de datos.
-  movies.push(newMovie);
+  const newMovie = await MovieModel.create({ input: result.data });
 
   // 201 Created: devuelve el recurso creado.
   res.status(201).json(newMovie);
 });
 
 // PATCH actualiza solo los campos enviados (PUT reemplazaria todo el recurso).
-app.patch('/movies/:id', (req, res) => {
+app.patch('/movies/:id', async (req, res) => {
   const result = validatePartialMovie(req.body);
 
   if (!result.success) {
@@ -85,31 +70,22 @@ app.patch('/movies/:id', (req, res) => {
   }
 
   const { id } = req.params;
-  const movieIndex = movies.findIndex((movie) => movie.id === id);
+  const updatedMovie = await MovieModel.update({ id, input: result.data });
 
-  if (movieIndex === -1) {
+  if (updatedMovie === false) {
     return res.status(404).json({ message: 'Pelicula no encontrada' });
   }
 
-  const updateMovie = {
-    ...movies[movieIndex],
-    ...result.data,
-  };
-
-  movies[movieIndex] = updateMovie;
-
-  return res.json(updateMovie);
+  return res.json(updatedMovie);
 });
 
-app.delete('/movies/:id', (req, res) => {
+app.delete('/movies/:id', async (req, res) => {
   const { id } = req.params;
-  const movieIndex = movies.findIndex((movie) => movie.id === id);
+  const deleted = await MovieModel.delete({ id });
 
-  if (movieIndex === -1) {
+  if (deleted === false) {
     return res.status(404).json({ message: 'Pelicula no encontrada' });
   }
-
-  movies.splice(movieIndex, 1);
 
   return res.json({ message: 'Pelicula eliminada' });
 });
