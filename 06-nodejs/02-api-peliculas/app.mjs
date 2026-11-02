@@ -12,16 +12,29 @@ app.use(express.json());
 
 // CORS: el navegador bloquea las peticiones a otro origen (otro dominio o puerto)
 // salvo que el servidor responda con la cabecera Access-Control-Allow-Origin.
-// '*' permite cualquier origen.
+// Aqui solo se aceptan los origenes de esta lista (lista blanca).
+const ACCEPTED_ORIGINS = ['http://localhost:8080', 'http://localhost:4200', 'https://movies.com'];
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.header('origin');
+
+  // Si la peticion es del mismo origen, el navegador no manda la cabecera origin.
+  if (origin && ACCEPTED_ORIGINS.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
   next();
 });
 
 // Las peticiones con PATCH o DELETE primero mandan un OPTIONS (preflight) preguntando si estan permitidas.
 app.options('/movies/:id', (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  const origin = req.header('origin');
+
+  if (origin && ACCEPTED_ORIGINS.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  }
+
   res.sendStatus(204);
 });
 
