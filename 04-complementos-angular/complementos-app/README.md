@@ -1,59 +1,50 @@
-# ComplementosApp
+# Complementos de Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
+Práctica de los temas que complementan el curso de Angular y que sirven de puente
+hacia un sistema con mapas: ciclo de vida de los componentes, formularios reactivos
+y OpenLayers dentro de un componente. Proyecto con Angular CLI 21, componentes
+standalone, signals y sin zone.js.
 
-## Development server
+## Páginas
 
-To start a local development server, run:
+| Ruta | Tema | Qué practica |
+|---|---|---|
+| `/ciclo-de-vida` | Ciclo de vida de componentes | Registro en pantalla de `constructor`, `ngOnChanges`, `ngOnInit`, `ngDoCheck`, `ngAfterContentInit`, `ngAfterViewInit`, `afterNextRender`, `ngOnDestroy` y `DestroyRef` |
+| `/formulario` | Formularios reactivos | `FormBuilder`, `FormGroup`, validadores, mensajes de error, `patchValue` y `setValue` |
+| `/mapa` | OpenLayers en Angular | Mapa dentro de un componente, controles de escala y posición del mouse |
 
-```bash
-ng serve
-```
+## Fuentes
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Guía oficial de Angular sobre el ciclo de vida de los componentes.
+- Video de formularios reactivos (28 días aprendiendo Angular, día 14).
+- Video del componente de OpenLayers (Moldeo Interactive).
+- Artículo *OpenLayers in an Angular application - Basics* (Camptocamp).
 
-## Code scaffolding
+## Qué se hizo en cada tema
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+**Ciclo de vida.** Un componente hijo escribe en un servicio cada hook que se ejecuta,
+y la página lo muestra en una lista. Se puede mostrar y ocultar el hijo para ver
+`ngOnDestroy`, y cambiar el texto de un `input()` para ver `ngOnChanges`.
+`ngDoCheck` y los hooks `Checked` solo escriben en la consola porque corren muy seguido.
 
-```bash
-ng generate component component-name
-```
+**Formulario reactivo.** El formulario de contacto (nombre, mayor de edad, departamento
+y comentario) con validaciones. El botón se bloquea mientras el formulario sea inválido.
+`patchValue` cambia solo algunos campos; `setValue` exige todos, si falta uno lanza error.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+**Mapa.** Primero se hizo como en el video: un componente con `lat`, `lng` y `zoom`
+que crea el mapa en `ngAfterViewInit`. Después se refactorizó al patrón del artículo:
+la página crea el mapa y `MapComponent` solo lo dibuja. Así los controles
+(`app-scaleline` y `app-mouse-position`) reciben el mismo mapa y se agregan solo
+si están en la plantilla. Al salir de la página, el mapa y los controles se sueltan.
+`::ng-deep` se usa porque OpenLayers crea su HTML sin los atributos de Angular.
 
-```bash
-ng generate --help
-```
+## Cómo correrlo
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Requiere Node.js.
 
 ```bash
-ng e2e
+npm install
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Se abre en `http://localhost:4200`. El mapa necesita internet para cargar los mosaicos de OpenStreetMap.
