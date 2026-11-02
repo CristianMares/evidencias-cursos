@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, input, OnDestroy, viewChild } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -17,7 +17,7 @@ const toCssSize = (value: string | number) => (typeof value === 'number' ? `${va
   template: `<div #map></div>`,
   styles: [':host { display: block; }'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
   lat = input(-34.6037);
   lng = input(-58.3816);
   zoom = input(16);
@@ -26,6 +26,15 @@ export class MapComponent implements AfterViewInit {
 
   private mapElement = viewChild.required<ElementRef<HTMLDivElement>>('map');
   private map?: Map;
+
+  constructor() {
+    // Si cambian lat, lng o zoom despues de crear el mapa, se mueve la vista.
+    effect(() => {
+      const center = fromLonLat([this.lng(), this.lat()]);
+      const zoom = this.zoom();
+      this.map?.getView().animate({ center, zoom, duration: 500 });
+    });
+  }
 
   // Se usa ngAfterViewInit para estar seguros de que el div ya existe en el DOM.
   ngAfterViewInit() {
@@ -44,5 +53,10 @@ export class MapComponent implements AfterViewInit {
         zoom: this.zoom(),
       }),
     });
+  }
+
+  // Al salir de la pagina se suelta el mapa para liberar el DOM y los eventos.
+  ngOnDestroy() {
+    this.map?.setTarget(undefined);
   }
 }
