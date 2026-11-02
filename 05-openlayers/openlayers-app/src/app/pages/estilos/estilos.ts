@@ -1,5 +1,6 @@
+import { FeatureLike } from 'ol/Feature';
 import { StyleLike } from 'ol/style/Style';
-import { Circle as CircleStyle, Fill, Icon, RegularShape, Stroke, Style } from 'ol/style';
+import { Circle as CircleStyle, Fill, Icon, RegularShape, Stroke, Style, Text } from 'ol/style';
 
 // Un solo Style se aplica igual a todos los objetos de la capa.
 // stroke: borde de poligonos y color de las lineas. fill: relleno. image: forma de los puntos.
@@ -41,11 +42,37 @@ export const estiloIconos = new Style({
   image: new Icon({ src: `data:image/svg+xml;charset=utf-8,${svgArbol}`, width: 32, height: 32 }),
 });
 
-export type Modo = 'defecto' | 'fijo' | 'formas' | 'iconos';
+// Funcion de estilo: OpenLayers la llama una vez por cada objeto (feature) y usa el Style que devuelva.
+// Aqui se diferencia por el tipo de geometria (en el curso se convierte a JSON; getType() lo da directo).
+export const estiloPorGeometria = (feature: FeatureLike): Style => {
+  const tipo = feature.getGeometry()?.getType();
+
+  switch (tipo) {
+    case 'Point':
+      return new Style({
+        image: new Icon({ src: `data:image/svg+xml;charset=utf-8,${svgArbol}`, width: 32, height: 32 }),
+        text: new Text({ text: 'Punto', offsetY: 24, font: 'bold 12px sans-serif' }),
+      });
+    case 'LineString':
+      return new Style({
+        stroke: new Stroke({ color: '#c62828', width: 5 }),
+        text: new Text({ text: 'Linea', font: 'bold 12px sans-serif', placement: 'line' }),
+      });
+    default:
+      return new Style({
+        stroke: new Stroke({ color: '#2e7d32', width: 3 }),
+        fill: new Fill({ color: 'rgba(46, 125, 50, 0.4)' }),
+        text: new Text({ text: 'Poligono', font: 'bold 12px sans-serif' }),
+      });
+  }
+};
+
+export type Modo = 'defecto' | 'fijo' | 'formas' | 'iconos' | 'geometria';
 
 export const MODOS: { id: Modo; nombre: string; estilo: StyleLike | undefined }[] = [
   { id: 'defecto', nombre: 'Estilo por defecto', estilo: undefined },
   { id: 'fijo', nombre: 'Estilo fijo (borde, relleno y circulo)', estilo: estiloFijo },
   { id: 'formas', nombre: 'Formas regulares (triangulo)', estilo: estiloFormas },
   { id: 'iconos', nombre: 'Iconos', estilo: estiloIconos },
+  { id: 'geometria', nombre: 'Funcion: segun la geometria', estilo: estiloPorGeometria },
 ];
