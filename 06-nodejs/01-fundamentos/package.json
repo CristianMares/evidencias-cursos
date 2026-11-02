@@ -1,0 +1,20 @@
+{
+  "name": "fundamentos-nodejs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Practica del curso de Node.js desde cero: modulos, os, fs, path, process, ls y servidores http",
+  "type": "module",
+  "scripts": {
+    "cjs": "node modulos/commonjs/index.cjs",
+    "esm": "node modulos/esm/index.mjs",
+    "os": "node os-info.mjs",
+    "fs:sync": "node fs-sync.mjs",
+    "fs:callback": "node fs-callback.mjs",
+    "fs:promises": "node fs-promises.mjs",
+    "fs:paralelo": "node fs-paralelo.mjs",
+    "path": "node path.mjs",
+    "process": "node process.mjs",
+    "ls": "node ls.mjs",
+    "servidor": "node --watch servidor-http.mjs"
+  }
+}
