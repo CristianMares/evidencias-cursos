@@ -9,27 +9,9 @@ const app = express();
 // Oculta la cabecera X-Powered-By: Express (no hay por que decir con que se hizo el servidor).
 app.disable('x-powered-by');
 
-// Middleware: una funcion que se ejecuta antes de llegar a la ruta.
-// Este lee el cuerpo de las peticiones POST con JSON y lo deja en req.body.
-app.use((req, res, next) => {
-  if (req.method !== 'POST') return next();
-  if (req.headers['content-type'] !== 'application/json') return next();
-
-  let body = '';
-  req.on('data', (chunk) => {
-    body += chunk.toString();
-  });
-
-  req.on('end', () => {
-    try {
-      req.body = JSON.parse(body);
-      req.body.timestamp = Date.now();
-      next();
-    } catch {
-      res.status(400).json({ error: 'El cuerpo debe ser un JSON valido' });
-    }
-  });
-});
+// Middleware incluido en Express: lee el cuerpo JSON de la peticion y lo deja en req.body.
+// Hace lo mismo que el middleware escrito a mano en el paso anterior.
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('<h1>Mi pagina</h1>');
@@ -40,7 +22,7 @@ app.get('/pokemon/ditto', (req, res) => {
 });
 
 app.post('/pokemon', (req, res) => {
-  res.status(201).json(req.body);
+  res.status(201).json({ ...req.body, timestamp: Date.now() });
 });
 
 // Se ejecuta si ninguna ruta anterior respondio: es el 404.
