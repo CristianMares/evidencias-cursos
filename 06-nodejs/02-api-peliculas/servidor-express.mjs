@@ -1,5 +1,9 @@
 import express from 'express';
 import { readFileSync } from 'node:fs';
+import { loadEnv } from './lib/dotenv.mjs';
+
+// Carga las variables del archivo .env antes de leer process.env.
+loadEnv();
 
 const ditto = JSON.parse(readFileSync('./pokemon/ditto.json', 'utf-8'));
 const PORT = process.env.PORT ?? 1234;
