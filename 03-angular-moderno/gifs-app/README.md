@@ -1,59 +1,56 @@
 # GifsApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
+Práctica de las secciones 6 y 7 del curso *Angular moderno: de cero a experto*
+(Fernando Herrera). Buscador de gifs con la API de Giphy, hecho con Angular CLI 21,
+componentes standalone, signals y Tailwind CSS.
 
-## Development server
+## Qué hace
 
-To start a local development server, run:
+- **Trending**: muestra los gifs populares que trae de Giphy.
+- **Buscador**: busca gifs por texto (Enter o botón).
+- **Historial**: cada búsqueda se guarda con sus resultados. Aparece en el menú lateral
+  y se abre en una URL como `/dashboard/history/goku`, sin volver a pedir los datos.
+- El historial se mantiene al recargar la página (LocalStorage).
 
-```bash
-ng serve
+## Estructura
+
+```
+src/app/gifs/
+├── components/   side-menu (header y opciones), gif-list y gif-list-item
+├── interfaces/   forma de la respuesta de Giphy y del Gif de la app
+├── mapper/       convierte la respuesta de Giphy en un Gif
+├── pages/        dashboard (layout), trending, search e history
+└── services/     GifService: peticiones HTTP, historial y LocalStorage
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Conceptos practicados
 
-## Code scaffolding
+- Rutas hijas y `loadComponent` (carga perezosa de páginas).
+- `routerLink` y `routerLinkActive` desde componentes hijos.
+- Environments (`environment.ts`) y path alias (`@environments`, `@gifs`).
+- `input()` para pasar datos entre componentes.
+- `HttpClient` con `provideHttpClient()`, parámetros y `pipe(map, tap)`.
+- Signals en un servicio: `signal`, `computed` y `effect`.
+- Parámetros dinámicos de URL (`history/:query`) con `toSignal`.
+- LocalStorage para guardar y cargar el historial.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Cómo correrlo
 
-```bash
-ng generate component component-name
-```
+Requiere Node.js y una API key gratuita de Giphy (developers.giphy.com → Create an App → API).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Instala las dependencias:
 
-```bash
-ng generate --help
-```
+   ```bash
+   npm install
+   ```
 
-## Building
+2. Pega tu key en `src/environments/environment.development.ts`
+   (`giphyApiKey`). No la subas al repositorio.
 
-To build the project run:
+3. Inicia la app:
 
-```bash
-ng build
-```
+   ```bash
+   npm start
+   ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Se abre en `http://localhost:4200`.
