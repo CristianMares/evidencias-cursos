@@ -1,5 +1,7 @@
 import express from 'express';
+import crypto from 'node:crypto';
 import { readJSON } from './utils.mjs';
+import { validateMovie } from './schemas/movies.mjs';
 
 const movies = readJSON('./movies.json');
 const PORT = process.env.PORT ?? 1234;
@@ -34,6 +36,26 @@ app.get('/movies/:id', (req, res) => {
   if (movie) return res.json(movie);
 
   res.status(404).json({ message: 'Pelicula no encontrada' });
+});
+
+app.post('/movies', (req, res) => {
+  const result = validateMovie(req.body);
+
+  // 400 Bad Request: el cliente mando datos invalidos.
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues.map((issue) => issue.message) });
+  }
+
+  const newMovie = {
+    id: crypto.randomUUID(), // uuid v4
+    ...result.data,
+  };
+
+  // Esto no es REST puro porque el estado se guarda en memoria; mas adelante va a una base de datos.
+  movies.push(newMovie);
+
+  // 201 Created: devuelve el recurso creado.
+  res.status(201).json(newMovie);
 });
 
 app.listen(PORT, () => {
