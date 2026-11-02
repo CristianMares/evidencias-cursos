@@ -1,12 +1,17 @@
 import { Router } from 'express';
 import { MovieController } from '../controllers/movies.mjs';
 
-// Un Router agrupa las rutas de un recurso. Aqui todas cuelgan de /movies.
-export const moviesRouter = Router();
+// Una funcion que crea el router recibiendo el modelo que debe usar.
+export const createMovieRouter = ({ movieModel }) => {
+  const moviesRouter = Router();
+  const movieController = new MovieController({ movieModel });
 
-moviesRouter.get('/', MovieController.getAll);
-moviesRouter.post('/', MovieController.create);
+  moviesRouter.get('/', movieController.getAll);
+  moviesRouter.post('/', movieController.create);
 
-moviesRouter.get('/:id', MovieController.getById);
-moviesRouter.patch('/:id', MovieController.update);
-moviesRouter.delete('/:id', MovieController.delete);
+  moviesRouter.get('/:id', movieController.getById);
+  moviesRouter.patch('/:id', movieController.update);
+  moviesRouter.delete('/:id', movieController.delete);
+
+  return moviesRouter;
+};
