@@ -10,3 +10,14 @@
   top: 0.5em;
   left: 3em;
 }
+
+/* Zoom a la extension inicial: boton con texto, debajo de los botones de zoom. */
+.ol-zoom-extent-inicio {
+  position: absolute;
+  top: 5em;
+  left: 0.5em;
+}
+.ol-zoom-extent-inicio button {
+  width: auto;
+  padding: 0 0.5em;
+}
