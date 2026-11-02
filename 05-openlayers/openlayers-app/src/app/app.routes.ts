@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/vectores/vectores-page.component'),
   },
   {
+    path: 'interacciones',
+    loadComponent: () => import('./pages/interacciones/interacciones-page.component'),
+  },
+  {
     path: '**',
     redirectTo: 'vista-de-inicio',
   },
