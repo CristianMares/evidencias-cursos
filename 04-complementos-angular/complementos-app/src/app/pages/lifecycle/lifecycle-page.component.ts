@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { LifecycleChildComponent } from '../../components/lifecycle/lifecycle-child.component';
+import { LifecycleLogService } from '../../services/lifecycle-log.service';
 
 @Component({
   selector: 'app-lifecycle-page',
-  template: `<h2>Ciclo de vida</h2>`,
+  imports: [LifecycleChildComponent],
+  templateUrl: './lifecycle-page.component.html',
 })
-export default class LifecyclePageComponent {}
+export default class LifecyclePageComponent {
+  logService = inject(LifecycleLogService);
+}
