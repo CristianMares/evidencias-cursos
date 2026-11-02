@@ -1,0 +1,16 @@
+# Base de datos MySQL para practicar. Uso:  docker compose up -d
+services:
+  db:
+    image: mysql:8.4
+    container_name: moviesdb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - '${DB_PORT:-3306}:3306'
+    volumes:
+      # Todo archivo .sql en esta carpeta se ejecuta la primera vez que se crea la base.
+      - ./database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro
+      - moviesdb-data:/var/lib/mysql
+
+volumes:
+  moviesdb-data:
