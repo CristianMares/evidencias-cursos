@@ -1,0 +1,31 @@
+<h2>Formulario reactivo</h2>
+<hr />
+
+<form class="col-md-6" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label" for="name">Nombre</label>
+    <input id="name" type="text" class="form-control" formControlName="name" />
+  </div>
+
+  <div class="form-check mb-3">
+    <input id="checkAdult" type="checkbox" class="form-check-input" formControlName="checkAdult" />
+    <label class="form-check-label" for="checkAdult">Soy mayor de 18 anios</label>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="department">Departamento</label>
+    <select id="department" class="form-select" formControlName="department">
+      <option value="">Selecciona uno</option>
+      <option value="ventas">Ventas</option>
+      <option value="soporte">Soporte</option>
+      <option value="sistemas">Sistemas</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="comment">Comentario</label>
+    <textarea id="comment" rows="3" class="form-control" formControlName="comment"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
