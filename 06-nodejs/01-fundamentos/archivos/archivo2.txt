@@ -1,0 +1,2 @@
+Hola, soy el segundo archivo de texto.
+Sirvo para ver como se leen varios archivos al mismo tiempo.
