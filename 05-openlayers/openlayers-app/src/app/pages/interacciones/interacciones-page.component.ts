@@ -3,6 +3,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import { Draw } from 'ol/interaction';
@@ -35,6 +36,14 @@ type Herramienta = 'punto' | 'linea' | 'poligono';
       }
     </div>
 
+    <div class="mb-3">
+      <button class="btn btn-outline-danger me-2" [disabled]="cantidad() === 0" (click)="limpiar()">Limpiar</button>
+      <button class="btn btn-outline-success me-2" [disabled]="cantidad() === 0" (click)="descargar()">
+        Descargar GeoJSON
+      </button>
+      <span class="text-muted">Objetos dibujados: {{ cantidad() }}</span>
+    </div>
+
     <div class="map-container">
       <app-map [map]="map" />
     </div>
@@ -48,6 +57,7 @@ export default class InteraccionesPageComponent {
   ];
 
   herramienta = signal<Herramienta | null>(null);
+  cantidad = signal(0);
 
   // El VectorSource guarda lo que se dibuja y el VectorLayer lo muestra.
   source = new VectorSource();
@@ -69,6 +79,9 @@ export default class InteraccionesPageComponent {
   });
 
   constructor() {
+    // El evento change se dispara cada vez que el source cambia (se agrega o se quita un objeto).
+    this.source.on('change', () => this.cantidad.set(this.source.getFeatures().length));
+
     Object.values(this.interacciones).forEach((interaccion) => {
       interaccion.setActive(false);
       this.map.addInteraction(interaccion);
@@ -82,5 +95,23 @@ export default class InteraccionesPageComponent {
     (Object.keys(this.interacciones) as Herramienta[]).forEach((clave) =>
       this.interacciones[clave].setActive(clave === nueva),
     );
+  }
+
+  limpiar() {
+    this.source.clear();
+  }
+
+  descargar() {
+    // Convierte los objetos dibujados (EPSG:3857) a un texto GeoJSON en lon/lat (EPSG:4326).
+    const geojson = new GeoJSON().writeFeatures(this.source.getFeatures(), {
+      featureProjection: 'EPSG:3857',
+      dataProjection: 'EPSG:4326',
+    });
+
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(new Blob([geojson], { type: 'application/geo+json' }));
+    enlace.download = 'features.geojson';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
   }
 }
