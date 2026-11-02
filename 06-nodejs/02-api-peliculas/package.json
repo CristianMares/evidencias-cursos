@@ -1,0 +1,14 @@
+{
+  "name": "api-peliculas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Practica de las clases 2 a 5 del curso de Node.js: servidor http, Express, API REST, MVC y MySQL",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "http": "node --watch servidor-http.mjs",
+    "express": "node --watch servidor-express.mjs"
+  }
+}
