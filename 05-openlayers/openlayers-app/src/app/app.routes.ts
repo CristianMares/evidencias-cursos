@@ -26,6 +26,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/estilos/estilos-page.component'),
   },
   {
+    path: 'layer-switcher',
+    loadComponent: () => import('./pages/layer-switcher/layer-switcher-page.component'),
+  },
+  {
     path: '**',
     redirectTo: 'vista-de-inicio',
   },
