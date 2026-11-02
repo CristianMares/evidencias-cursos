@@ -8,5 +8,6 @@ Prácticas y mini proyectos hechos mientras estudio cada curso.
 | TypeScript desde cero (MoureDev) | [`02-typescript`](02-typescript) | Un archivo por tema y un gestor de tareas por consola. |
 | Angular moderno (Fernando Herrera) | [`03-angular-moderno`](03-angular-moderno) | Dos aplicaciones: una básica (signals, componentes, servicios) y un buscador de gifs con la API de Giphy. |
 | Complementos de Angular | [`04-complementos-angular`](04-complementos-angular) | Una app con ciclo de vida de componentes, formulario reactivo con validaciones y un mapa de OpenLayers. |
+| OpenLayers 9 | [`05-openlayers`](05-openlayers) | Una app de Angular con una página por tema: controles, raster, vectores, interacciones de dibujo, estilos y selector de capas. |
 
 Cada carpeta tiene su propio README con el detalle y cómo correrlo.
