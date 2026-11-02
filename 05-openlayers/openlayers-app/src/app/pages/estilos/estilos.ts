@@ -67,7 +67,46 @@ export const estiloPorGeometria = (feature: FeatureLike): Style => {
   }
 };
 
-export type Modo = 'defecto' | 'fijo' | 'formas' | 'iconos' | 'geometria';
+// Mejor aun: usar las propiedades del objeto (sus atributos) para decidir el estilo.
+const COLORES_USO: Record<string, string> = {
+  parque: '46, 125, 50',
+  comercial: '198, 40, 40',
+  residencial: '21, 101, 192',
+};
+
+export const estiloPorPropiedad = (feature: FeatureLike): Style => {
+  const nombre = feature.get('nombre') as string;
+  const tipoGeometria = feature.getGeometry()?.getType();
+
+  if (tipoGeometria === 'Point') {
+    return new Style({
+      image: new CircleStyle({
+        radius: 9,
+        stroke: new Stroke({ color: '#ffffff', width: 2 }),
+        fill: new Fill({ color: feature.get('tipo') === 'estadio' ? '#ef6c00' : '#6a1b9a' }),
+      }),
+      text: new Text({ text: nombre, offsetY: -18, font: 'bold 12px sans-serif', stroke: new Stroke({ color: '#fff', width: 3 }) }),
+    });
+  }
+
+  if (tipoGeometria === 'LineString') {
+    // Las avenidas son mas gruesas y oscuras que las calles.
+    const esAvenida = feature.get('tipo') === 'avenida';
+    return new Style({
+      stroke: new Stroke({ color: esAvenida ? '#37474f' : '#90a4ae', width: esAvenida ? 7 : 3 }),
+      text: new Text({ text: nombre, font: '12px sans-serif', placement: 'line', stroke: new Stroke({ color: '#fff', width: 3 }) }),
+    });
+  }
+
+  const rgb = COLORES_USO[feature.get('uso') as string] ?? '120, 120, 120';
+  return new Style({
+    stroke: new Stroke({ color: `rgb(${rgb})`, width: 2 }),
+    fill: new Fill({ color: `rgba(${rgb}, 0.35)` }),
+    text: new Text({ text: nombre, font: 'bold 12px sans-serif', stroke: new Stroke({ color: '#fff', width: 3 }) }),
+  });
+};
+
+export type Modo = 'defecto' | 'fijo' | 'formas' | 'iconos' | 'geometria' | 'propiedad';
 
 export const MODOS: { id: Modo; nombre: string; estilo: StyleLike | undefined }[] = [
   { id: 'defecto', nombre: 'Estilo por defecto', estilo: undefined },
@@ -75,4 +114,5 @@ export const MODOS: { id: Modo; nombre: string; estilo: StyleLike | undefined }[
   { id: 'formas', nombre: 'Formas regulares (triangulo)', estilo: estiloFormas },
   { id: 'iconos', nombre: 'Iconos', estilo: estiloIconos },
   { id: 'geometria', nombre: 'Funcion: segun la geometria', estilo: estiloPorGeometria },
+  { id: 'propiedad', nombre: 'Funcion: segun las propiedades', estilo: estiloPorPropiedad },
 ];
