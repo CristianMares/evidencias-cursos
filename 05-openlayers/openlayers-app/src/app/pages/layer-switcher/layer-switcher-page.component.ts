@@ -1,13 +1,25 @@
 import { Component, signal } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
+import GeoJSON from 'ol/format/GeoJSON';
 import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
 import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
 import XYZ from 'ol/source/XYZ';
 import { fromLonLat } from 'ol/proj';
+import { StyleLike } from 'ol/style/Style';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import { MapComponent } from '../../components/map/map.component';
-import { LA_PAZ } from '../../shared/la-paz';
+import { estiloManzanas, estiloPredios, estiloVias } from './estilos-catastro';
+
+// Carga un archivo GeoJSON como capa vectorial con titulo (para el selector de capas) y estilo.
+const capaVectorial = (url: string, title: string, style: StyleLike) =>
+  new VectorLayer({
+    source: new VectorSource({ url, format: new GeoJSON() }),
+    style,
+    properties: { title },
+  });
 
 @Component({
   selector: 'app-layer-switcher-page',
@@ -15,8 +27,9 @@ import { LA_PAZ } from '../../shared/la-paz';
   template: `
     <h2>Selector de capas (ol-ext)</h2>
     <p class="text-muted">
-      Control LayerSwitcher de la libreria de terceros ol-ext. Pasa el mouse sobre el icono de capas (arriba a la
-      derecha). Las capas base son excluyentes: solo una se ve a la vez.
+      Capas base (excluyentes) y capas tematicas (manzanas, predios y vias) que se pueden mostrar, ocultar,
+      reordenar y hacerles transparencia. Acercate para ver las etiquetas. Los datos son inventados, solo para
+      practicar.
     </p>
     @if (info()) {
       <p>Informacion de la capa: <strong>{{ info() }}</strong></p>
@@ -30,8 +43,7 @@ import { LA_PAZ } from '../../shared/la-paz';
 export default class LayerSwitcherPageComponent {
   info = signal('');
 
-  // title: nombre que muestra el selector. baseLayer: true: capa base (solo una visible a la vez).
-  // En TypeScript estas propiedades extra se pasan por "properties".
+  // El orden importa: la primera capa queda abajo y las siguientes encima.
   map = new Map({
     layers: [
       new TileLayer({
@@ -56,10 +68,13 @@ export default class LayerSwitcherPageComponent {
         }),
         properties: { title: 'Satelite', baseLayer: true },
       }),
+      capaVectorial('data/manzanas.geojson', 'Manzanas', estiloManzanas),
+      capaVectorial('data/predios.geojson', 'Predios', estiloPredios),
+      capaVectorial('data/vias.geojson', 'Vias', estiloVias),
     ],
     view: new View({
-      center: fromLonLat([LA_PAZ.lon, LA_PAZ.lat]),
-      zoom: 12,
+      center: fromLonLat([-68.1325, -16.496]),
+      zoom: 17,
     }),
   });
 
@@ -68,6 +83,7 @@ export default class LayerSwitcherPageComponent {
       new LayerSwitcher({
         mouseover: true,
         show_progress: true,
+        reordering: true,
         oninfo: (layer) => this.info.set(layer.get('title')),
       }),
     );
