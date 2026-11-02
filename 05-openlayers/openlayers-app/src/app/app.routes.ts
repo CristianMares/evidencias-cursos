@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/interacciones/interacciones-page.component'),
   },
   {
+    path: 'estilos',
+    loadComponent: () => import('./pages/estilos/estilos-page.component'),
+  },
+  {
     path: '**',
     redirectTo: 'vista-de-inicio',
   },

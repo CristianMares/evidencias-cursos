@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "nombre": "Plaza Murillo", "tipo": "plaza" }, "geometry": { "type": "Point", "coordinates": [-68.1339, -16.4957] } },
+    { "type": "Feature", "properties": { "nombre": "Estadio Hernando Siles", "tipo": "estadio" }, "geometry": { "type": "Point", "coordinates": [-68.1243, -16.5043] } },
+    { "type": "Feature", "properties": { "nombre": "Avenida 6 de Agosto", "tipo": "avenida" }, "geometry": { "type": "LineString", "coordinates": [[-68.1245, -16.5115], [-68.1275, -16.5055], [-68.13, -16.5], [-68.132, -16.4965]] } },
+    { "type": "Feature", "properties": { "nombre": "Avenida Camacho", "tipo": "avenida" }, "geometry": { "type": "LineString", "coordinates": [[-68.1385, -16.4985], [-68.1345, -16.499], [-68.13, -16.4985]] } },
+    { "type": "Feature", "properties": { "nombre": "Calle Comercio", "tipo": "calle" }, "geometry": { "type": "LineString", "coordinates": [[-68.1365, -16.495], [-68.1335, -16.4965], [-68.1305, -16.498]] } },
+    { "type": "Feature", "properties": { "nombre": "Parque central", "uso": "parque" }, "geometry": { "type": "Polygon", "coordinates": [[[-68.1305, -16.5045], [-68.1275, -16.5045], [-68.1275, -16.5025], [-68.1305, -16.5025], [-68.1305, -16.5045]]] } },
+    { "type": "Feature", "properties": { "nombre": "Zona comercial", "uso": "comercial" }, "geometry": { "type": "Polygon", "coordinates": [[[-68.1375, -16.5005], [-68.1345, -16.5005], [-68.1345, -16.4995], [-68.1375, -16.4995], [-68.1375, -16.5005]]] } },
+    { "type": "Feature", "properties": { "nombre": "Zona residencial", "uso": "residencial" }, "geometry": { "type": "Polygon", "coordinates": [[[-68.1255, -16.4985], [-68.1225, -16.4985], [-68.1225, -16.4965], [-68.1255, -16.4965], [-68.1255, -16.4985]]] } }
+  ]
+}
