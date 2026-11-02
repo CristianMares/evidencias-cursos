@@ -1,59 +1,48 @@
-# OpenlayersApp
+# Práctica de OpenLayers
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
+Práctica del curso *OpenLayers 9* (videos 01 al 13, 16 y 17). El curso se hace con JavaScript puro;
+aquí cada tema se practicó dentro de una aplicación Angular 21 (componentes standalone, signals y sin zone.js),
+que es donde se va a usar después. La librería instalada es OpenLayers 10.
 
-## Development server
+## Páginas
 
-To start a local development server, run:
+| Ruta | Videos | Qué practica |
+|---|---|---|
+| `/vista-de-inicio` | 03 | `Map`, `View`, centro con `fromLonLat`, zoom, proyección EPSG:3857, extensión y límites de zoom |
+| `/controles` | 04 y 05 | Controles por defecto traducidos, pantalla completa, posición del mouse (con formato y fuera del mapa), escala y zoom a la extensión inicial |
+| `/raster` | 06 | Capas de mosaicos (`TileLayer`) con OSM y fuentes `XYZ`, atribuciones |
+| `/vectores` | 07 | Archivo GeoJSON con `VectorSource` y `VectorLayer`, atributos al hacer clic y rango de zoom por capa |
+| `/interacciones` | 08, 09 y 10 | Dibujar puntos, líneas y polígonos, modificar, eliminar, limpiar y descargar un GeoJSON |
+| `/estilos` | 11, 12 y 13 | `Style`, `Stroke`, `Fill`, círculo, formas regulares, iconos y estilos mediante funciones (por geometría y por propiedades) |
+| `/layer-switcher` | 16 y 17 | Librería ol-ext: `LayerSwitcher` con capas base y capas temáticas (manzanas, predios y vías) con estilos y etiquetas |
 
-```bash
-ng serve
-```
+Los videos 14, 15 y 18 (controles personalizados y búsqueda) eran opcionales y no se incluyeron.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Cómo está organizado
 
-## Code scaffolding
+- Cada página crea su mapa y se lo pasa a `MapComponent`, un componente que solo lo dibuja
+  (el mismo patrón de la práctica de complementos de Angular).
+- `src/app/shared/la-paz.ts` guarda la ubicación de los ejemplos. OpenLayers trabaja en EPSG:3857 (metros);
+  las coordenadas en longitud y latitud (EPSG:4326) se convierten con `fromLonLat`.
+- `public/data/` tiene los GeoJSON de ejemplo. Los de Bolivia son aproximados y los de manzanas, predios y vías
+  están inventados para practicar; no son datos reales.
+- `src/ol-ext.d.ts` declara los tipos mínimos de ol-ext, que viene en JavaScript sin tipos.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Diferencias con el curso
 
-```bash
-ng generate component component-name
-```
+- El curso usa mosaicos de Google. Aquí se usan OpenStreetMap, OpenTopoMap y Esri (imágenes satelitales),
+  con su atribución visible, para no depender de un servicio que no permite ese uso.
+- Los iconos de los puntos son SVG incluidos en el propio código en vez de archivos PNG descargados.
+- Las propiedades `title` y `baseLayer` que lee el selector de capas se pasan con `properties`,
+  porque TypeScript no acepta propiedades extra en las opciones de la capa.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Cómo correrlo
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Requiere Node.js e internet (para los mosaicos del mapa).
 
 ```bash
-ng e2e
+npm install
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Se abre en `http://localhost:4200`.
