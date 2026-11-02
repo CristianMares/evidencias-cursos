@@ -1,11 +1,25 @@
-import { Component, inject, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  DoCheck,
+  inject,
+  input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { LifecycleLogService } from '../../services/lifecycle-log.service';
 
 @Component({
   selector: 'app-lifecycle-child',
   templateUrl: './lifecycle-child.component.html',
 })
-export class LifecycleChildComponent implements OnChanges, OnInit {
+export class LifecycleChildComponent
+  implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked
+{
   private logService = inject(LifecycleLogService);
 
   name = input('');
@@ -14,7 +28,6 @@ export class LifecycleChildComponent implements OnChanges, OnInit {
     this.logService.log('constructor');
   }
 
-  // Se ejecuta cada vez que cambia un input, incluso antes de ngOnInit.
   ngOnChanges(changes: SimpleChanges) {
     const change = changes['name'];
     if (change) {
@@ -26,5 +39,26 @@ export class LifecycleChildComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.logService.log('ngOnInit');
+  }
+
+  // Los hooks "Checked" y ngDoCheck se ejecutan muy seguido: solo van a la consola.
+  ngDoCheck() {
+    console.log('ngDoCheck');
+  }
+
+  ngAfterContentInit() {
+    this.logService.log('ngAfterContentInit');
+  }
+
+  ngAfterContentChecked() {
+    console.log('ngAfterContentChecked');
+  }
+
+  ngAfterViewInit() {
+    this.logService.log('ngAfterViewInit');
+  }
+
+  ngAfterViewChecked() {
+    console.log('ngAfterViewChecked');
   }
 }

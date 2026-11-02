@@ -1,3 +1,5 @@
 <div class="card card-body">
-  <p class="mb-0">Componente hijo. Nombre recibido: <strong>{{ name() }}</strong></p>
+  <p class="mb-2">Componente hijo. Nombre recibido: <strong>{{ name() }}</strong></p>
+  <!-- Contenido proyectado desde el padre: dispara los hooks AfterContent -->
+  <ng-content />
 </div>
