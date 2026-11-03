@@ -85,6 +85,11 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Cerrar sesion es borrar la cookie. Como el token vive en la cookie, sin ella no hay sesion.
+app.post('/logout', (req, res) => {
+  res.clearCookie('access_token').json({ message: 'Sesion cerrada' });
+});
+
 // Ruta protegida: solo entra quien tiene sesion. Si no, 403 Forbidden.
 app.get('/protected', (req, res) => {
   const { user } = req.session;
