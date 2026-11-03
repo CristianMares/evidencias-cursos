@@ -4,8 +4,12 @@ import { PORT } from './config.mjs';
 const app = express();
 app.disable('x-powered-by');
 
+// EJS genera HTML en el servidor a partir de las plantillas de la carpeta views.
+app.set('view engine', 'ejs');
+app.set('views', `${import.meta.dirname}/views`);
+
 app.get('/', (req, res) => {
-  res.send('<h1>Hola</h1>');
+  res.render('index');
 });
 
 app.listen(PORT, () => {

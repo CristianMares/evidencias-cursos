@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Autenticacion</title>
+    <style>
+      body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+      form { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+      label, input, button { display: block; margin-bottom: 0.5rem; }
+      input { padding: 0.4rem; width: 100%; box-sizing: border-box; }
+      button { padding: 0.5rem 1rem; cursor: pointer; }
+      .mensaje { min-height: 1.5rem; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <h1>Autenticacion</h1>
+
+    <% if (locals.username) { %>
+      <section>
+        <h2>Hola <%= username %></h2>
+        <p><a href="/protected">Ir a la pagina protegida</a></p>
+        <button id="close-session">Cerrar sesion</button>
+      </section>
+    <% } else { %>
+      <form id="login-form">
+        <h2>Iniciar sesion</h2>
+        <label for="login-username">Usuario</label>
+        <input id="login-username" name="username" required />
+        <label for="login-password">Contrasena</label>
+        <input id="login-password" name="password" type="password" required />
+        <button type="submit">Entrar</button>
+        <span class="mensaje" id="login-message"></span>
+      </form>
+
+      <form id="register-form">
+        <h2>Registro</h2>
+        <label for="register-username">Usuario</label>
+        <input id="register-username" name="username" required />
+        <label for="register-password">Contrasena</label>
+        <input id="register-password" name="password" type="password" required />
+        <label for="register-confirm">Repite la contrasena</label>
+        <input id="register-confirm" name="confirm" type="password" required />
+        <button type="submit">Registrarme</button>
+        <span class="mensaje" id="register-message"></span>
+      </form>
+    <% } %>
+
+    <script>
+      // Los formularios mandan los datos con fetch (JSON) y muestran la respuesta del servidor.
+      const $ = (selector) => document.querySelector(selector);
+
+      const send = async (url, body) => {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+        return { ok: res.ok, data: await res.json().catch(() => ({})) };
+      };
+
+      $('#login-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const { ok, data } = await send('/login', {
+          username: $('#login-username').value,
+          password: $('#login-password').value,
+        });
+        if (ok) window.location.href = '/protected';
+        else $('#login-message').textContent = data.error ?? 'Error al iniciar sesion';
+      });
+
+      $('#register-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if ($('#register-password').value !== $('#register-confirm').value) {
+          $('#register-message').textContent = 'Las contrasenas no coinciden';
+          return;
+        }
+        const { ok, data } = await send('/register', {
+          username: $('#register-username').value,
+          password: $('#register-password').value,
+        });
+        $('#register-message').textContent = ok ? 'Usuario registrado, ya puedes iniciar sesion' : (data.error ?? 'Error al registrarse');
+      });
+
+      $('#close-session')?.addEventListener('click', async () => {
+        await send('/logout');
+        window.location.href = '/';
+      });
+    </script>
+  </body>
+</html>
