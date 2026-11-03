@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import { PORT, SECRET_JWT_KEY } from './config.mjs';
 import { AuthenticationError, UserRepository, ValidationError } from './user-repository.mjs';
@@ -12,8 +13,28 @@ app.set('views', `${import.meta.dirname}/views`);
 // Lee el cuerpo JSON de las peticiones y lo deja en req.body.
 app.use(express.json());
 
+// cookie-parser deja las cookies de la peticion en req.cookies.
+app.use(cookieParser());
+
+// Middleware de sesion: corre en TODAS las peticiones, antes de llegar a las rutas.
+// Si la cookie trae un token valido, deja los datos del usuario en req.session.user.
+app.use((req, res, next) => {
+  const token = req.cookies.access_token;
+  req.session = { user: null };
+
+  try {
+    // verify lanza un error si el token esta alterado o ya vencio.
+    req.session.user = jwt.verify(token, SECRET_JWT_KEY);
+  } catch {
+    // Sin token o token invalido: el usuario simplemente no tiene sesion.
+  }
+
+  next();
+});
+
 app.get('/', (req, res) => {
-  res.render('index');
+  const { user } = req.session;
+  res.render('index', { username: user?.username });
 });
 
 app.post('/login', async (req, res) => {
