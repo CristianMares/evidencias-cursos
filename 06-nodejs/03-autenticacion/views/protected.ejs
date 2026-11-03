@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pagina protegida</title>
+    <style>
+      body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+      button { padding: 0.5rem 1rem; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <h1>Pagina protegida</h1>
+    <p>Hola <strong><%= username %></strong>. Solo ves esto porque tienes una sesion valida.</p>
+    <p>Tu id de usuario es: <code><%= id %></code></p>
+    <p><a href="/">Volver al inicio</a></p>
+    <button id="close-session">Cerrar sesion</button>
+
+    <script>
+      document.querySelector('#close-session').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/';
+      });
+    </script>
+  </body>
+</html>

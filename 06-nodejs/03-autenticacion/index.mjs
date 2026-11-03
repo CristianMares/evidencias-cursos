@@ -85,6 +85,15 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Ruta protegida: solo entra quien tiene sesion. Si no, 403 Forbidden.
+app.get('/protected', (req, res) => {
+  const { user } = req.session;
+
+  if (!user) return res.status(403).send('Acceso no autorizado');
+
+  res.render('protected', user);
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
