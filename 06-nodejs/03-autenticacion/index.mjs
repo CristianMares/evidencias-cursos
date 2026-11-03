@@ -1,6 +1,7 @@
 import express from 'express';
-import { PORT } from './config.mjs';
-import { UserRepository, ValidationError } from './user-repository.mjs';
+import jwt from 'jsonwebtoken';
+import { PORT, SECRET_JWT_KEY } from './config.mjs';
+import { AuthenticationError, UserRepository, ValidationError } from './user-repository.mjs';
 
 const app = express();
 app.disable('x-powered-by');
@@ -13,6 +14,38 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.render('index');
+});
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body ?? {};
+
+  try {
+    const user = await UserRepository.login({ username, password });
+
+    // El token guarda quien es el usuario y esta firmado con la clave secreta:
+    // si alguien lo modifica, la firma deja de coincidir y deja de ser valido.
+    const token = jwt.sign({ id: user._id, username: user.username }, SECRET_JWT_KEY, {
+      expiresIn: '1h',
+    });
+
+    res
+      .cookie('access_token', token, {
+        httpOnly: true, // JavaScript del navegador no puede leer la cookie (protege contra XSS)
+        secure: process.env.NODE_ENV === 'production', // en produccion solo viaja por HTTPS
+        sameSite: 'strict', // solo se envia desde el mismo sitio (protege contra CSRF)
+        maxAge: 1000 * 60 * 60, // 1 hora, igual que el token
+      })
+      .json({ user });
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ error: error.message });
+    }
+    if (error instanceof AuthenticationError) {
+      return res.status(401).json({ error: error.message });
+    }
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
 
 app.post('/register', async (req, res) => {
