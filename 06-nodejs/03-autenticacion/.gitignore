@@ -1,0 +1,5 @@
+node_modules/
+.env
+# Base de datos local de db-local (guarda usuarios y contrasenas hasheadas)
+db/
+*.log
